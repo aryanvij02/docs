@@ -1,0 +1,199 @@
+---
+title: "Workflows"
+description: "Create guided, multi-step experiences"
+---
+
+Workflows (also called Journeys) are guided, multi-step processes that help users complete complex tasks. They provide structure to conversations and ensure important steps aren't missed.
+
+---
+
+## What Are Workflows?
+
+A workflow is a predefined sequence of steps that guides users through a process. Instead of free-form conversation, workflows provide a structured experience.
+
+**Example workflows:**
+- **Onboarding** — Walk new users through account setup
+- **Troubleshooting** — Guide users through diagnostic steps
+- **Returns** — Collect all required information for a return request
+- **Feedback** — Gather structured feedback with specific questions
+
+---
+
+## How Workflows Work
+
+1. **User triggers the workflow** — By asking something that matches the workflow's description
+2. **Agent starts the journey** — Presents the first step to the user
+3. **User completes steps** — Responds to each prompt in sequence
+4. **Agent guides progress** — Moves through steps, optionally calling tools
+5. **Workflow completes** — User has completed all steps
+
+Users can exit a workflow at any time if they want to ask something else.
+
+---
+
+## Creating a Workflow
+
+### Step 1: Open the Workflow Builder
+
+Go to **Actions** and find the **Workflows** section. Click **Create Journey** to open the builder.
+
+### Step 2: Define the Basics
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **Name** | Short, descriptive name | "New Customer Onboarding" |
+| **Description** | When the agent should use this workflow | "Use when a new user needs help getting started with the product" |
+
+The description is crucial — it tells the agent when to initiate this workflow.
+
+### Step 3: Add Steps
+
+Each step has:
+
+| Component | Purpose |
+|-----------|---------|
+| **Step text** | What to ask or tell the user |
+| **Tool (optional)** | An action to execute during this step |
+
+Example steps for an onboarding workflow:
+1. "Welcome! Let's get you set up. What's your company name?"
+2. "Great! How many team members will be using the product?"
+3. "What's your primary use case?" (Tool: `createAccount`)
+
+### Step 4: Save the Workflow
+
+Click **Save** to create the workflow. It will appear in your workflows list.
+
+---
+
+## Managing Workflows
+
+### View All Workflows
+
+The Workflows section shows all your journeys with:
+- Name and description
+- Number of steps
+- Enable/disable toggle
+- Edit and delete buttons
+
+### Enable/Disable
+
+Toggle a workflow on or off. Disabled workflows won't be triggered by the agent.
+
+### Edit
+
+Click the edit button to modify:
+- Name and description
+- Add, remove, or reorder steps
+- Change step text or tools
+
+### Delete
+
+Remove a workflow entirely. This action cannot be undone.
+
+---
+
+## Writing Good Workflows
+
+### Clear Entry Points
+
+Write descriptions that clearly indicate when the workflow should trigger:
+
+- Good: "Use when a customer wants to request a refund for an order"
+- Bad: "Refund workflow"
+
+### Logical Step Progression
+
+Order steps in a way that makes sense:
+1. Gather context first (what's the issue?)
+2. Collect required information (order number, reason)
+3. Take action (process the request)
+4. Confirm completion (provide next steps)
+
+### Conversational Tone
+
+Write step text as natural conversation:
+
+- Good: "I'd be happy to help! First, could you share your order number?"
+- Bad: "Enter order number:"
+
+### Include Confirmations
+
+End workflows with a clear conclusion:
+
+- "I've submitted your return request. You'll receive a confirmation email shortly."
+- "Your account is all set up! Is there anything else you'd like to know?"
+
+---
+
+## Using Tools in Steps
+
+You can attach a tool to any step. When the agent reaches that step:
+
+1. Collects user input for required parameters
+2. Executes the tool
+3. Uses the result to continue the conversation
+
+**Example:**
+- Step: "What's your order number?"
+- Tool: `getOrderDetails`
+- Result: Agent looks up the order and can reference details in subsequent steps
+
+---
+
+## Example Workflow: Return Request
+
+```
+Name: Return Request
+Description: Use when a customer wants to return or exchange a product they purchased
+
+Steps:
+1. "I can help you with your return. What's the order number for the item you'd like to return?"
+2. "Thanks! Which item from this order would you like to return?" [Tool: getOrderDetails]
+3. "Got it. What's the reason for the return?"
+4. "I've submitted your return request. You'll receive a return shipping label at your email address within 24 hours. Is there anything else I can help with?" [Tool: createReturnRequest]
+```
+
+---
+
+## Best Practices
+
+| Do | Don't |
+|----|-------|
+| Keep workflows focused on one task | Create overly long workflows |
+| Write conversational step text | Use robotic language |
+| Include confirmation at the end | Leave users wondering if it worked |
+| Test with real scenarios | Deploy without testing |
+| Use tools to validate information | Ask for info you could look up |
+
+---
+
+## Troubleshooting
+
+### Workflow Not Triggering
+- Check that the workflow is enabled
+- Review the description — does it match what users are asking?
+- Test with specific phrases in the Sandbox
+
+### Users Getting Stuck
+- Ensure step text is clear about what's expected
+- Add helpful examples in step text
+- Allow users to exit if the workflow doesn't fit their needs
+
+### Tools Not Executing
+- Verify the tool is enabled in Actions
+- Check that required parameters are being collected
+- Test the tool independently first
+
+---
+
+## Need Help?
+
+<CardGroup cols={2}>
+  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
+    support@usecrow.ai
+  </Card>
+  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
+    Schedule a 30-minute call
+  </Card>
+</CardGroup>

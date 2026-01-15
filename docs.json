@@ -21,6 +21,48 @@
               "identity-verification",
               "openapi-authentication"
             ]
+          },
+          {
+            "group": "Sandbox",
+            "pages": [
+              "sandbox-overview"
+            ]
+          },
+          {
+            "group": "Knowledge Base",
+            "pages": [
+              "knowledge-base-overview",
+              "files",
+              "website",
+              "notion"
+            ]
+          },
+          {
+            "group": "Integration",
+            "pages": [
+              "integration-overview",
+              "openapi",
+              "mcp-servers"
+            ]
+          },
+          {
+            "group": "Actions",
+            "pages": [
+              "actions-overview",
+              "workflows"
+            ]
+          },
+          {
+            "group": "Activity",
+            "pages": [
+              "activity-overview"
+            ]
+          },
+          {
+            "group": "Deploy",
+            "pages": [
+              "deploy-overview"
+            ]
           }
         ]
       }

@@ -1,0 +1,185 @@
+---
+title: "MCP Servers"
+description: "Connect Model Context Protocol servers"
+---
+
+Connect MCP (Model Context Protocol) servers to extend your AI agent with powerful integrations. MCP is a standard protocol that enables AI agents to interact with external tools and services.
+
+---
+
+## What is MCP?
+
+Model Context Protocol (MCP) is an open standard for connecting AI models to external data sources and tools. MCP servers provide a standardized way for your agent to:
+
+- Access external services
+- Execute tools and actions
+- Retrieve contextual information
+
+---
+
+## Connecting an MCP Server
+
+### Step 1: Get Server Details
+
+You'll need:
+- **Server URL** — The HTTP/HTTPS endpoint of the MCP server
+- **Transport Protocol** — How to communicate (Streamable HTTP or SSE)
+- **Headers** (optional) — Any authentication headers required
+
+### Step 2: Add the Server
+
+1. Go to **Integration > MCP Servers**
+2. Click **Add Server**
+3. Fill in the connection details:
+
+| Field | Description |
+|-------|-------------|
+| **Server Name** | A friendly name (e.g., "my-api-server") |
+| **Server URL** | The MCP endpoint URL |
+| **Transport** | Streamable HTTP (recommended) or SSE |
+| **Headers** | Optional auth headers in `Key: Value` format |
+
+### Step 3: Test Connection
+
+Click **Test Connection** to verify the server is reachable and responding correctly.
+
+### Step 4: Save
+
+Once the connection test passes, save the server configuration.
+
+---
+
+## Transport Protocols
+
+### Streamable HTTP (Recommended)
+
+The modern transport protocol for MCP. Use this unless you have a specific reason to use SSE.
+
+### SSE (Server-Sent Events)
+
+Legacy transport protocol. Some older MCP servers may only support SSE.
+
+---
+
+## Managing Connected Servers
+
+### View Connected Servers
+
+All connected servers appear in a list showing:
+- Server name
+- Connection status
+- Number of available tools
+- Enable/disable toggle
+
+### Enable/Disable Servers
+
+Toggle a server on or off without removing it. Disabled servers won't be available to your agent.
+
+### View Available Tools
+
+Click the expand arrow on any server to see its available tools. Each tool shows:
+- Tool name
+- Description of what it does
+
+### Edit Server
+
+Click the edit button to modify:
+- Server URL
+- Transport protocol
+- Headers
+
+### Delete Server
+
+Remove a server entirely by clicking the delete button.
+
+---
+
+## Configuring Tools
+
+After connecting a server, you can fine-tune which tools your agent can use:
+
+1. Go to **Actions > MCP Servers**
+2. Find your server in the list
+3. Expand to see individual tools
+4. Toggle specific tools on or off
+
+This gives you granular control over what your agent can do.
+
+---
+
+## Pre-Built Integrations
+
+Crow includes pre-built support for popular services:
+
+### Notion
+Connect your Notion workspace via **Knowledge Base > Notion**. This uses MCP under the hood to provide real-time access to your Notion content.
+
+### Coming Soon
+- Slack
+- GitHub
+- Google Drive
+
+---
+
+## Building Custom MCP Servers
+
+If you want to build your own MCP server to expose custom tools:
+
+1. Implement the MCP protocol specification
+2. Host your server at a publicly accessible URL
+3. Add the server URL in Crow
+
+MCP servers can be built in any language that supports HTTP.
+
+---
+
+## Best Practices
+
+### Use Descriptive Names
+Name your servers clearly so you can identify them later:
+- Good: `customer-data-api`, `order-management`
+- Bad: `server1`, `test`
+
+### Secure Your Endpoints
+- Use HTTPS for all MCP server URLs
+- Include authentication headers when required
+- Don't expose sensitive operations unnecessarily
+
+### Test After Connecting
+Verify in the Sandbox that your agent can discover and use the MCP tools correctly.
+
+### Monitor for Changes
+If your MCP server adds or removes tools, Crow will discover changes automatically when tools are fetched.
+
+---
+
+## Troubleshooting
+
+### Connection Test Failed
+- Verify the server URL is correct
+- Check that the server is running and accessible
+- Ensure any required headers are included
+- Try the other transport protocol
+
+### Tools Not Appearing
+- Expand the server to trigger tool discovery
+- Check server logs for errors
+- Verify the server implements tool listing correctly
+
+### Agent Not Using MCP Tools
+- Enable the server in the MCP servers list
+- Enable specific tools in Actions
+- Test with queries that should trigger the tools
+
+---
+
+## Need Help?
+
+<CardGroup cols={2}>
+  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
+    support@usecrow.ai
+  </Card>
+  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
+    Schedule a 30-minute call
+  </Card>
+</CardGroup>

@@ -1,0 +1,128 @@
+---
+title: "Files"
+description: "Upload documents to your knowledge base"
+---
+
+Upload documents to give your AI agent access to your product documentation, guides, FAQs, and other reference materials.
+
+---
+
+## Supported Formats
+
+| Format | Extensions | Notes |
+|--------|------------|-------|
+| PDF | `.pdf` | Best for manuals and formatted docs |
+| Word | `.docx` | Microsoft Word documents |
+| Text | `.txt` | Plain text files |
+| Markdown | `.md` | Documentation and READMEs |
+| Excel | `.xlsx`, `.xls` | Spreadsheets with tabular data |
+| CSV | `.csv` | Comma-separated data files |
+
+---
+
+## Uploading Files
+
+### Drag and Drop
+Simply drag files from your computer and drop them into the upload area.
+
+### Click to Browse
+Click the upload area to open a file browser and select files.
+
+### Multiple Files
+You can upload multiple files at once. Each file is processed independently.
+
+---
+
+## Visual Processing
+
+When uploading PDFs, you can enable **Visual Processing** by checking the box before upload.
+
+### What Visual Processing Does
+- Extracts text from images within PDFs
+- Reads charts and tables more accurately
+- Understands document layouts better
+
+### When to Use It
+Enable visual processing when your documents contain:
+- Screenshots or diagrams
+- Complex tables
+- Scanned documents
+- Charts and graphs
+
+<Warning>
+Visual processing takes longer than standard text extraction. Only enable it when your documents contain visual elements.
+</Warning>
+
+---
+
+## Upload Progress
+
+After uploading, you'll see a progress card showing:
+
+| Status | Meaning |
+|--------|---------|
+| **Queued** | File is waiting to be processed |
+| **Processing** | File is being read and indexed |
+| **Complete** | File is ready and searchable |
+| **Failed** | An error occurred (check the error message) |
+
+For PDFs, you'll also see page-by-page progress (e.g., "Page 15 of 42").
+
+---
+
+## Managing Documents
+
+### View Documents
+The document list shows all uploaded files with their document IDs and filenames.
+
+### Delete Documents
+Click the delete button next to any document to remove it from your knowledge base. This action cannot be undone.
+
+---
+
+## Best Practices
+
+### File Size
+- Small to medium files (under 50MB) process fastest
+- Very large files may take several minutes
+
+### Content Quality
+- Ensure documents contain searchable text (not scanned images without OCR)
+- Well-structured documents with clear headings work best
+- Remove unnecessary pages (cover pages, blank pages) before upload
+
+### Organization
+- Use descriptive filenames so you can identify documents later
+- Upload related content together for easier management
+
+---
+
+## Troubleshooting
+
+### File Won't Upload
+- Check that the file format is supported
+- Ensure the file isn't corrupted
+- Try a different browser if issues persist
+
+### Processing Failed
+- The file may be password-protected (remove protection and re-upload)
+- The file may be corrupted (try re-creating or re-exporting)
+- Very large files may timeout (try splitting into smaller files)
+
+### Agent Can't Find Content
+- Wait for processing to complete (check status)
+- Test specific questions in the Sandbox
+- Ensure the content is in a searchable format
+
+---
+
+## Need Help?
+
+<CardGroup cols={2}>
+  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
+    support@usecrow.ai
+  </Card>
+  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
+    Schedule a 30-minute call
+  </Card>
+</CardGroup>

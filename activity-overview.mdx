@@ -1,0 +1,181 @@
+---
+title: "Activity"
+description: "Monitor conversations and agent performance"
+---
+
+The Activity page gives you visibility into all conversations your AI agent has with users. Track conversations, debug issues, and understand how your agent is performing.
+
+---
+
+## Activity Overview
+
+The Activity page shows all conversations in a two-panel layout:
+
+- **Left panel** — List of conversations with filters
+- **Right panel** — Detailed view of the selected conversation
+
+---
+
+## Conversation List
+
+The left panel displays all conversations with:
+
+| Info | Description |
+|------|-------------|
+| **Conversation ID** | Unique identifier for the conversation |
+| **Preview** | First message from the user |
+| **Timestamp** | When the conversation occurred |
+| **Status** | Success, error, or other states |
+
+Click any conversation to view its details in the right panel.
+
+---
+
+## Filtering Conversations
+
+Use filters to find specific conversations:
+
+### Date Range
+Select a start and end date to view conversations within a time period.
+
+### Status
+Filter by conversation outcome:
+- **Success** — Conversation completed normally
+- **Error** — An error occurred during the conversation
+
+### Message Count
+Filter by number of messages in the conversation.
+
+### Search
+Search for specific text within conversations.
+
+---
+
+## Conversation Details
+
+When you select a conversation, the right panel shows three tabs:
+
+### Chat Tab
+
+View the conversation as it appeared to the user:
+- User messages (right side)
+- Agent responses (left side)
+- Timestamps for each message
+- Tool calls and their results
+- Agent's reasoning process (when applicable)
+
+### Details Tab
+
+Metadata about the conversation:
+
+| Field | Description |
+|-------|-------------|
+| **Conversation ID** | Unique identifier |
+| **Start time** | When the conversation began |
+| **End time** | When the conversation ended |
+| **Message count** | Total messages exchanged |
+| **Token usage** | Tokens consumed |
+| **Model** | AI model used |
+| **Status** | Final conversation status |
+| **Cost** | Estimated cost (if enabled) |
+
+### Traces Tab
+
+Technical debugging information:
+- Raw trace data from the AI model
+- Detailed execution timeline
+- Useful for debugging complex issues
+
+---
+
+## Understanding Tool Calls
+
+In the Chat tab, you'll see when your agent used tools:
+
+```
+🔧 Calling: getOrderStatus
+   Parameters: {"orderId": "ORD-12345"}
+
+✅ Result: {"status": "shipped", "tracking": "1Z999..."}
+```
+
+This shows:
+- Which tool was called
+- What parameters were sent
+- What response was received
+
+---
+
+## Common Patterns to Look For
+
+### Successful Conversations
+- User asks a question
+- Agent retrieves relevant information (from knowledge base or tools)
+- Agent provides a helpful response
+- User is satisfied
+
+### Tool Usage Issues
+- Agent attempts to use a tool
+- Tool returns an error
+- Agent may try alternative approaches or apologize
+
+### Knowledge Gaps
+- User asks about something not in your knowledge base
+- Agent indicates it doesn't have that information
+- Opportunity to add content to your knowledge base
+
+---
+
+## Using Activity for Improvement
+
+### Identify Common Questions
+
+Look for patterns in user questions:
+- Frequently asked questions → Add to knowledge base
+- Repeated tool usage → Ensure tools are working well
+- Common confusion → Improve system prompt
+
+### Spot Issues Early
+
+Monitor for:
+- Error conversations
+- Tool failures
+- Unhelpful responses
+
+### Measure Performance
+
+Track over time:
+- Conversation volume
+- Success rates
+- Tool usage patterns
+- Token consumption
+
+---
+
+## Exporting Data
+
+Click the download button to export conversation data for further analysis.
+
+---
+
+## Privacy Considerations
+
+Conversation data may contain:
+- User questions and context
+- Personal information shared by users
+- Tool responses with customer data
+
+Handle exported data according to your privacy policy and data retention requirements.
+
+---
+
+## Need Help?
+
+<CardGroup cols={2}>
+  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
+    support@usecrow.ai
+  </Card>
+  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
+    Schedule a 30-minute call
+  </Card>
+</CardGroup>
