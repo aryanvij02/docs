@@ -27,7 +27,8 @@
   },
   "logo": {
     "light": "/logo/crow-docs.png",
-    "dark": "/logo/crow-docs.png"
+    "dark": "/logo/crow-docs.png",
+    "height": 32
   },
   "navbar": {
     "links": [
