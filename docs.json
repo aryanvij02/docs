@@ -3,9 +3,12 @@
   "theme": "mint",
   "name": "Crow",
   "colors": {
-    "primary": "#18181B",
-    "light": "#71717A",
-    "dark": "#FAFAFA"
+    "primary": "#000000",
+    "light": "#000000",
+    "dark": "#FAFAFA",
+    "background": {
+      "dark": "#18181B"
+    }
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -45,18 +48,18 @@
     "links": [
       {
         "label": "Dashboard",
-        "href": "https://usecrow.org"
+        "href": "https://usecrow.ai"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Get Started",
-      "href": "https://usecrow.org"
+      "href": "https://usecrow.ai"
     }
   },
   "footer": {
     "socials": {
-      "website": "https://usecrow.org"
+      "website": "https://usecrow.ai"
     }
   }
 }
