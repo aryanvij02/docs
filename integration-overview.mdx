@@ -1,84 +1,49 @@
 ---
 title: "Integration"
-description: "Connect your agent to external APIs and services"
+description: "Connect your agent to APIs and services"
 ---
 
-Integrations extend your AI agent's capabilities by connecting it to external APIs and services. This allows your agent to take actions, fetch data, and interact with your systems.
+Integrations let your agent take actions—not just answer questions.
+
+## Options
+
+| Type | Best for | Setup |
+|------|----------|-------|
+| [OpenAPI](/openapi) | Your REST API | Upload spec file |
+| [MCP Servers](/mcp-servers) | Third-party services, complex integrations | Connect server URL |
+
+## When to Use OpenAPI
+
+- You have a REST API with an OpenAPI/Swagger spec
+- You want your agent to call your backend (check orders, create tickets, etc.)
+- You need to authenticate requests with API keys or user tokens
+
+## When to Use MCP
+
+- Connecting third-party services
+- Using pre-built integrations (Notion, etc.)
+- Real-time bidirectional communication
+
+## Example Actions
+
+**OpenAPI:**
+- Check order status
+- Create support tickets
+- Look up customer info
+- Process refunds
+
+**MCP:**
+- Search Notion pages
+- Query databases
+- Access Google Drive
 
 ---
-
-## Integration Options
-
-Crow supports two types of integrations:
 
 <CardGroup cols={2}>
   <Card title="OpenAPI" icon="code" href="/openapi">
-    Connect any REST API by uploading an OpenAPI specification.
+    Connect your REST API
   </Card>
   <Card title="MCP Servers" icon="server" href="/mcp-servers">
-    Connect Model Context Protocol servers for advanced integrations.
-  </Card>
-</CardGroup>
-
----
-
-## OpenAPI vs MCP
-
-| Feature | OpenAPI | MCP |
-|---------|---------|-----|
-| **Best for** | REST APIs you control | Third-party services, complex integrations |
-| **Setup** | Upload a spec file | Connect to a server URL |
-| **Authentication** | API Key, Bearer, JWT Forward | Varies by server |
-| **Flexibility** | Any REST API | Pre-built integrations |
-
-### When to Use OpenAPI
-
-- You have a REST API with an OpenAPI/Swagger specification
-- You want your agent to call endpoints on your backend
-- You need to authenticate requests with API keys or tokens
-- You want to forward user identity to your API
-
-### When to Use MCP
-
-- You want to connect third-party services (like Notion)
-- You're using pre-built MCP servers
-- The service provides an MCP endpoint
-- You need real-time, bidirectional communication
-
----
-
-## How Integrations Work
-
-1. **Configure the integration** — Upload an OpenAPI spec or connect an MCP server
-2. **Select tools** — Choose which operations/tools your agent can use (in Actions)
-3. **Agent uses tools** — When relevant, your agent calls these tools to help users
-4. **Results returned** — The tool response is used to formulate the agent's answer
-
----
-
-## Example Use Cases
-
-### OpenAPI Examples
-- Check order status from your e-commerce API
-- Create support tickets in your ticketing system
-- Look up customer information from your CRM
-- Process refunds through your payment system
-
-### MCP Examples
-- Search and retrieve Notion pages
-- Access Google Drive documents
-- Query internal databases
-- Interact with Slack channels
-
----
-
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
-  </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
+    Connect MCP servers
   </Card>
 </CardGroup>

@@ -3,124 +3,44 @@ title: "Actions"
 description: "Configure what your agent can do"
 ---
 
-Actions determine what your AI agent can do beyond answering questions. This is where you enable and configure the tools available to your agent.
+Actions are capabilities you enable for your agent. Go to **Actions** in the dashboard to manage them.
 
----
+## Types
 
-## What Are Actions?
+| Type | Source | Example |
+|------|--------|---------|
+| **API Tools** | Your OpenAPI spec | `getOrderStatus`, `createTicket` |
+| **MCP Tools** | Connected MCP servers | Notion search, database queries |
+| **Workflows** | You define them | Onboarding flow, return request |
 
-Actions are the capabilities you give your agent. When a user asks something that requires taking action (like checking an order status or creating a ticket), your agent uses these tools to help.
+## Enabling Actions
 
----
+1. **API Tools** — Check/uncheck individual endpoints from your OpenAPI spec
+2. **MCP Tools** — Toggle entire servers or individual tools
+3. **Workflows** — Enable/disable specific flows
 
-## Types of Actions
+## How the Agent Decides
 
-Crow supports three types of actions:
+The agent automatically chooses tools based on:
+- The user's question
+- Tool names and descriptions
+- Required parameters
 
-### API Tools (OpenAPI)
-
-Operations from your OpenAPI specification. These call your REST API endpoints.
-
-**Example tools:**
-- `getOrderStatus` — Look up an order
-- `createTicket` — Create a support ticket
-- `getAccount` — Retrieve account details
-
-[Set up OpenAPI integration →](/openapi)
-
-### MCP Tools
-
-Tools from connected MCP servers. These interact with external services.
-
-**Example tools:**
-- Notion search and read operations
-- Custom database queries
-- Third-party service integrations
-
-[Connect MCP servers →](/mcp-servers)
-
-### Workflows (Journeys)
-
-Guided, multi-step processes you define. These walk users through complex tasks.
-
-**Example workflows:**
-- New user onboarding
-- Troubleshooting flow
-- Return request process
-
-[Create workflows →](/workflows)
-
----
-
-## Configuring Actions
-
-### Accessing the Actions Page
-
-Go to **Actions** in the sidebar to see all available tools organized by type.
-
-### Enabling/Disabling Tools
-
-Each section has toggles to control which tools your agent can use:
-
-1. **API Tools** — Check/uncheck individual endpoints
-2. **MCP Servers** — Toggle entire servers or individual tools
-3. **Workflows** — Enable/disable specific journeys
-
-### Select All / Deselect All
-
-Use the quick toggle to enable or disable all tools in a section at once.
-
----
-
-## How the Agent Uses Actions
-
-When a user asks a question:
-
-1. **Agent analyzes** the request
-2. **Identifies relevant tools** based on the question
-3. **Executes the tool** if needed
-4. **Uses the result** to formulate a response
-
-The agent automatically decides when to use tools based on the user's question and the tool descriptions.
-
----
+Good tool descriptions → better tool selection.
 
 ## Best Practices
 
-### Start Conservative
-Begin with a limited set of tools and expand as needed. Too many tools can confuse the agent.
-
-### Use Descriptive Names
-Tool names and descriptions help the agent understand when to use them. Clear descriptions lead to better tool selection.
-
-### Test Thoroughly
-After enabling tools, test in the Sandbox with realistic user questions to verify the agent uses them correctly.
-
-### Review Regularly
-As your product evolves, review which actions are enabled. Disable tools that are no longer relevant.
+- **Start small** — Enable only what's needed, expand later
+- **Test in Sandbox** — Verify tools work before deploying
+- **Clear descriptions** — Help the agent understand when to use each tool
 
 ---
-
-## Tool Visibility
-
-When tools are enabled, they appear to your agent as available capabilities. The agent sees:
-
-- Tool name
-- Description
-- Required parameters
-- What the tool returns
-
-This information helps the agent decide when and how to use each tool.
-
----
-
-## Need Help?
 
 <CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
+  <Card title="OpenAPI" icon="code" href="/openapi">
+    Set up API tools
   </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
+  <Card title="Workflows" icon="route" href="/workflows">
+    Create guided flows
   </Card>
 </CardGroup>

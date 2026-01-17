@@ -1,13 +1,14 @@
 ---
 title: "Embed Widget"
-description: "Add an AI-powered support widget to your website in minutes"
+description: "Add the Crow widget to your website"
 ---
 
-## Quick Start
+## Installation
 
-Add the Crow widget to your website with a single script tag:
+<CodeGroup>
 
-```html
+```html HTML
+<!-- Add before </body> -->
 <script
   src="https://api.usecrow.org/static/crow-widget.js"
   data-api-url="https://api.usecrow.org"
@@ -15,113 +16,126 @@ Add the Crow widget to your website with a single script tag:
 ></script>
 ```
 
-Place this script before the closing `</body>` tag in your HTML.
+```jsx React
+// _app.tsx or layout.tsx
+import Script from 'next/script'
 
----
+export default function Layout({ children }) {
+  return (
+    <>
+      {children}
+      <Script
+        src="https://api.usecrow.org/static/crow-widget.js"
+        data-api-url="https://api.usecrow.org"
+        data-product-id="YOUR_PRODUCT_ID"
+        strategy="afterInteractive"
+      />
+    </>
+  )
+}
+```
 
-## Find Your Product ID
+```vue Vue
+<script setup>
+import { onMounted } from 'vue'
 
-1. Go to **Crow Dashboard** → **Setup** → **Embed Widget** tab
-2. Copy your **Product ID** from the embed code shown
-3. Replace `YOUR_PRODUCT_ID` in the script above
+onMounted(() => {
+  const script = document.createElement('script')
+  script.src = 'https://api.usecrow.org/static/crow-widget.js'
+  script.setAttribute('data-api-url', 'https://api.usecrow.org')
+  script.setAttribute('data-product-id', 'YOUR_PRODUCT_ID')
+  document.body.appendChild(script)
+})
+</script>
+```
 
----
+```svelte Svelte
+<script>
+  import { onMount } from 'svelte'
+
+  onMount(() => {
+    const script = document.createElement('script')
+    script.src = 'https://api.usecrow.org/static/crow-widget.js'
+    script.setAttribute('data-api-url', 'https://api.usecrow.org')
+    script.setAttribute('data-product-id', 'YOUR_PRODUCT_ID')
+    document.body.appendChild(script)
+  })
+</script>
+```
+
+</CodeGroup>
 
 ## Script Attributes
 
 | Attribute | Required | Description |
-| --- | --- | --- |
-| `src` | Yes | The Crow widget script URL |
-| `data-api-url` | Yes | Crow API endpoint |
-| `data-product-id` | Yes | Your unique product identifier |
+|-----------|----------|-------------|
+| `src` | Yes | Widget script URL |
+| `data-api-url` | Yes | `https://api.usecrow.org` |
+| `data-product-id` | Yes | Your product ID from dashboard |
+
+## Find Your Product ID
+
+**Dashboard** → **Setup** → **Embed Widget** tab
 
 ---
 
-## Example Integration
+## JavaScript API
 
-### Basic HTML
+The widget exposes `window.crow()` for programmatic control.
 
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>My Website</title>
-  </head>
-  <body>
-    <h1>Welcome to My Site</h1>
+### identify
 
-    <!-- Your website content -->
+Authenticate the current user. Enables persistent conversations and user-specific actions.
 
-    <!-- Crow Widget - Add before closing body tag -->
-    <script
-      src="https://api.usecrow.org/static/crow-widget.js"
-      data-api-url="https://api.usecrow.org"
-      data-product-id="YOUR_PRODUCT_ID"
-    ></script>
-  </body>
-</html>
+```javascript
+window.crow('identify', {
+  token: 'jwt-from-your-backend',  // Required
+  name: 'John Doe'                  // Optional, shown in chat
+})
 ```
 
-### React / Next.js
+See [Identity Verification](/identity-verification) for backend setup.
 
-For React apps, add the script to your `index.html` or use a script loader:
+### resetUser
 
-```jsx
-// In your _app.tsx or layout component
-import { useEffect } from 'react';
+Clear user identity (call on logout).
 
-export default function App({ Component, pageProps }) {
-  useEffect(() => {
-    // Load Crow widget
-    const script = document.createElement('script');
-    script.src = 'https://api.usecrow.org/static/crow-widget.js';
-    script.setAttribute('data-api-url', 'https://api.usecrow.org');
-    script.setAttribute('data-product-id', 'YOUR_PRODUCT_ID');
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  return <Component {...pageProps} />;
-}
+```javascript
+window.crow('resetUser')
 ```
 
----
+### registerTools
 
-## What's Next?
+Register client-side tools the agent can call. Useful for actions that need access to your app's state.
 
-Once the widget is embedded, your users can start chatting with your AI agent right away.
+```javascript
+window.crow('registerTools', {
+  getCurrentPage: async () => {
+    return { page: window.location.pathname }
+  },
+  
+  addToCart: async ({ productId, quantity }) => {
+    await yourCartAPI.add(productId, quantity)
+    return { success: true }
+  },
+  
+  showUpgradeModal: async () => {
+    document.getElementById('upgrade-modal').showModal()
+    return { shown: true }
+  }
+})
+```
 
-To enable **persistent conversations** and **personalized experiences** for logged-in users, set up [Identity Verification](/identity-verification).
+<Note>
+Client tools run in the browser. Currently fire-and-forget—the agent triggers them but doesn't see the return value. Interested in bidirectional tool results? [Book a demo](https://cal.com/aryan-vij-wpimwt/30min).
+</Note>
 
 ---
 
 ## Troubleshooting
 
-### Widget not appearing
-
-1. **Check script placement** — Make sure the script is inside the `<body>` tag
-2. **Check Product ID** — Verify your `data-product-id` matches the one in your dashboard
-3. **Check console** — Look for any JavaScript errors in browser DevTools
-4. **Check network** — Ensure the script loads successfully (no 404 errors)
-
-### Widget appears but doesn't work
-
-1. **Check API URL** — Make sure `data-api-url` is set correctly
-2. **Check CORS** — Your domain might need to be whitelisted
-3. **Contact support** — Reach out if issues persist
-
----
-
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
-  </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
-  </Card>
-</CardGroup>
+| Issue | Solution |
+|-------|----------|
+| Widget not appearing | Check script is inside `<body>`, verify Product ID |
+| Console errors | Check `data-api-url` is correct |
+| CORS errors | Contact support to whitelist your domain |

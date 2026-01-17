@@ -3,124 +3,42 @@ title: "Notion"
 description: "Connect your Notion workspace"
 ---
 
-Connect your Notion workspace to give your AI agent access to your pages, databases, and documentation stored in Notion.
+Connect Notion for live access to your pages and databases. Changes in Notion are immediately available—no syncing required.
 
----
+## Connect
 
-## How It Works
-
-Unlike file uploads or website crawling, the Notion integration provides a **live connection** to your workspace. This means:
-
-- Your agent accesses Notion content in real-time
-- Changes in Notion are immediately available
-- No need to manually sync or re-index
-
----
-
-## Connecting Notion
-
-### Step 1: Start the Connection
-
-Click the **Connect Notion** button in the Notion section of Knowledge Base. This opens a popup window.
-
-### Step 2: Authorize Access
-
-In the popup, you'll see Notion's authorization screen:
-1. Select your workspace (if you have multiple)
-2. Choose which pages/databases to share with Crow
-3. Click **Allow access**
-
-### Step 3: Confirmation
-
-Once authorized, you'll see:
-- A green status indicator showing "Connected"
-- Your workspace name displayed
-- The connection is now active
-
----
+1. Click **Connect Notion**
+2. Select your workspace
+3. Choose pages/databases to share
+4. Click **Allow access**
 
 ## What Your Agent Can Do
 
-With Notion connected, your agent can:
+- Search across shared pages
+- Read page content and database entries
+- Use content to answer questions
 
-| Capability | Description |
-|------------|-------------|
-| **Search pages** | Find relevant content across your workspace |
-| **Read content** | Access page content and database entries |
-| **Answer questions** | Use Notion content to respond to users |
+## Managing Connection
 
----
+| Action | How |
+|--------|-----|
+| View status | Green = connected |
+| Open Notion | Click **Open Notion** |
+| Disconnect | Click **Disconnect** |
 
-## Managing the Connection
+## Configuring Tools
 
-### View Connection Status
-The Notion page shows your current connection status:
-- **Connected** (green) — Workspace is linked and accessible
-- **Disconnected** — No workspace connected
+After connecting, go to **Actions** → **Notion** to toggle specific capabilities.
 
-### Open Notion
-Click **Open Notion** to go directly to your connected workspace.
+## Change Shared Pages
 
-### Disconnect
-To remove the connection, click **Disconnect**. This revokes Crow's access to your Notion workspace.
-
-<Warning>
-Disconnecting will prevent your agent from accessing any Notion content. Make sure this is intentional before disconnecting.
-</Warning>
-
----
-
-## Configuring Notion Tools
-
-After connecting Notion, you can fine-tune which Notion capabilities your agent has access to:
-
-1. Go to **Actions > Notion**
-2. View the available Notion tools
-3. Toggle individual tools on or off
-
-This lets you control exactly what your agent can do with your Notion workspace.
-
----
-
-## Best Practices
-
-### Share Relevant Pages
-When authorizing, only share pages and databases that are relevant for customer support. You don't need to share your entire workspace.
-
-### Organize Content
-Well-organized Notion content helps your agent find information faster. Use clear page titles and organized databases.
-
-### Keep Content Updated
-Since the connection is live, any updates you make in Notion are immediately available to your agent.
-
----
+1. Disconnect current connection
+2. Reconnect and select different pages
 
 ## Troubleshooting
 
-### Connection Failed
-- Ensure popups are allowed in your browser
-- Try the connection again
-- Check that you have permission to authorize apps in your Notion workspace
-
-### Agent Can't Find Notion Content
-- Verify the connection is active (green status)
-- Check that the relevant pages were shared during authorization
-- Re-connect if needed to update page access
-
-### Need to Change Shared Pages
-To modify which pages are shared:
-1. Disconnect the current connection
-2. Reconnect and select different pages during authorization
-
----
-
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
-  </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
-  </Card>
-</CardGroup>
+| Issue | Solution |
+|-------|----------|
+| Connection failed | Enable popups, try again |
+| Content not found | Check pages were shared during auth |
+| Need different pages | Disconnect and reconnect |

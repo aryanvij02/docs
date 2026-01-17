@@ -1,123 +1,42 @@
 ---
 title: "Website"
-description: "Crawl and index your website content"
+description: "Crawl and index your website"
 ---
 
-Connect your website to automatically crawl and index your public content, making it searchable by your AI agent.
+Automatically crawl your website so your agent can reference its content.
 
----
+## Setup
 
-## How It Works
-
-1. **Enter your URL** — Provide the root URL of your website or documentation site
-2. **Crow crawls** — Automatically discovers and visits pages on your site
-3. **Content is indexed** — Text is extracted, chunked, and stored for search
-4. **Agent can reference** — Your agent uses this content to answer user questions
-
----
-
-## Setting Up Website Ingestion
-
-### Enter Your Website URL
-
-In the Website section of Knowledge Base, enter the full URL of your site:
-
-```
-https://docs.yourcompany.com
-```
-
-or
-
-```
-https://yourcompany.com/help
-```
-
-### Start Ingestion
-
-Click the **Ingest** button to begin crawling. The process runs in the background, so you can navigate away.
-
----
+1. Enter your website URL (e.g., `https://docs.yourcompany.com`)
+2. Click **Ingest**
+3. Crow crawls linked pages on the same domain
 
 ## What Gets Crawled
 
-Crow will crawl pages that are:
-- Publicly accessible (no login required)
-- Linked from your starting URL
-- On the same domain
+**Included:**
+- Publicly accessible pages
+- Pages linked from starting URL
+- Same domain only
 
-### Good Candidates
-- Documentation sites
-- Help centers
-- FAQ pages
-- Blog posts
-- Product pages
-
-### Not Crawled
+**Not included:**
 - Password-protected pages
 - Pages blocked by robots.txt
-- External links (other domains)
-- Dynamic content requiring JavaScript interaction
+- External domains
+- JavaScript-rendered content
 
----
+## Re-indexing
 
-## Viewing Status
-
-Once ingested, you'll see a confirmation showing your website URL with a checkmark. This indicates the content has been successfully indexed.
-
----
-
-## Re-Indexing Your Website
-
-When your website content changes, you'll want to re-index:
-
-1. Navigate to **Knowledge Base > Website**
-2. Enter your website URL again
-3. Click **Ingest** to start a fresh crawl
+When content changes:
+1. Go to **Knowledge Base** → **Website**
+2. Enter URL again
+3. Click **Ingest**
 
 <Warning>
-Re-indexing replaces the previous content. Make sure your website is accessible before re-indexing.
+Re-indexing replaces previous content.
 </Warning>
 
----
+## Tips
 
-## Best Practices
-
-### Use Your Documentation Site
-If you have a separate documentation site (like `docs.yourcompany.com`), use that URL for more focused content.
-
-### Keep Content Updated
-Re-index your website whenever you make significant content changes to keep your agent's knowledge current.
-
-### Check Accessibility
-Ensure the pages you want indexed don't require authentication and are accessible from the public internet.
-
----
-
-## Troubleshooting
-
-### Pages Not Being Indexed
-- Verify the URL is correct and publicly accessible
-- Check if pages are blocked by robots.txt
-- Ensure pages are linked from the starting URL
-
-### Old Content Still Appearing
-- Re-index your website to refresh the content
-- Wait for the indexing process to complete
-
-### Agent Can't Find Website Content
-- Confirm the ingestion completed successfully
-- Test with specific questions in the Sandbox
-- Check if the content is on a page that was crawled
-
----
-
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
-  </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
-  </Card>
-</CardGroup>
+- Use your docs subdomain for focused content (`docs.yourcompany.com`)
+- Re-index after major content updates
+- Test in Sandbox to verify content is accessible

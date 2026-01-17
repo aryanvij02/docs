@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Crow Docs",
+  "name": "Crow",
   "colors": {
-    "primary": "#000000",
-    "light": "#4A4A4A",
-    "dark": "#000000"
+    "primary": "#18181B",
+    "light": "#71717A",
+    "dark": "#FAFAFA"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -14,55 +14,24 @@
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting Started",
-            "pages": [
-              "index",
-              "embed-widget",
-              "identity-verification",
-              "openapi-authentication"
-            ]
-          },
-          {
-            "group": "Sandbox",
-            "pages": [
-              "sandbox-overview"
-            ]
+            "group": "Get Started",
+            "pages": ["index", "quickstart", "embed-widget", "identity-verification"]
           },
           {
             "group": "Knowledge Base",
-            "pages": [
-              "knowledge-base-overview",
-              "files",
-              "website",
-              "notion"
-            ]
+            "pages": ["knowledge-base-overview", "files", "website", "notion"]
           },
           {
             "group": "Integration",
-            "pages": [
-              "integration-overview",
-              "openapi",
-              "mcp-servers"
-            ]
+            "pages": ["integration-overview", "openapi", "openapi-authentication", "mcp-servers"]
           },
           {
-            "group": "Actions",
-            "pages": [
-              "actions-overview",
-              "workflows"
-            ]
+            "group": "Agent",
+            "pages": ["sandbox-overview", "actions-overview", "workflows"]
           },
           {
-            "group": "Activity",
-            "pages": [
-              "activity-overview"
-            ]
-          },
-          {
-            "group": "Deploy",
-            "pages": [
-              "deploy-overview"
-            ]
+            "group": "Monitor",
+            "pages": ["activity-overview", "deploy-overview"]
           }
         ]
       }
@@ -75,13 +44,13 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:support@usecrow.ai"
+        "label": "Dashboard",
+        "href": "https://usecrow.org"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
+      "label": "Get Started",
       "href": "https://usecrow.org"
     }
   },

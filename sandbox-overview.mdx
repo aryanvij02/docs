@@ -1,95 +1,71 @@
 ---
 title: "Sandbox"
-description: "Configure and test your AI agent in real-time"
+description: "Configure and test your agent"
 ---
 
-The Sandbox is your live testing environment where you configure your AI agent's behavior and preview how it responds to users in real-time.
+The Sandbox is where you configure your agent and test responses in real-time.
 
----
+## Configuration
 
-## Agent Configuration
+| Field | Description |
+|-------|-------------|
+| **Agent Name** | Displayed in widget header |
+| **System Prompt** | Instructions that define agent behavior |
 
-### Agent Name
+## Writing a System Prompt
 
-Set a display name for your agent. This name appears in the chat widget header and helps users identify who they're talking to.
+<CodeGroup>
 
-### System Prompt (Instructions)
+```text Basic
+You are a support agent for [Company Name].
+Help users with questions about [your product].
+Be friendly and concise.
+```
 
-The system prompt defines your agent's personality, knowledge boundaries, and behavior. This is where you tell your agent:
-- What it should know about your product
-- How it should respond to users
-- What topics it should or shouldn't discuss
-- Any specific guidelines or tone preferences
+```text With boundaries
+You are a support agent for Acme Software.
 
----
+What you can help with:
+- Product features and how to use them
+- Billing and subscription questions
+- Technical troubleshooting
+
+What you cannot do:
+- Discuss competitors
+- Make promises about future features
+- Access or modify user data directly
+
+If you don't know something, say so and offer to connect them with support@acme.com.
+```
+
+```text With product context
+You are the support agent for Acme, a project management tool.
+
+Key features:
+- Task boards (Kanban-style)
+- Time tracking
+- Team chat
+- Integrations with Slack, GitHub, Jira
+
+Pricing:
+- Free: up to 5 users
+- Pro: $10/user/month
+- Enterprise: Contact sales
+
+Common issues:
+- "Can't invite team members" → Check they're on a paid plan
+- "Integrations not working" → Verify OAuth connection in Settings
+```
+
+</CodeGroup>
 
 ## Live Preview
 
-The right side of the Sandbox shows a live preview of your chat widget. As you make changes to your agent's configuration, you can immediately test how it responds.
+The right panel shows a live widget preview. Changes apply immediately—test different scenarios before deploying.
 
-The preview widget:
-- Streams responses in real-time
-- Shows the exact appearance users will see
-- Allows you to test different conversation scenarios
+## Tips
 
----
-
-## Writing Effective System Prompts
-
-A well-crafted system prompt is crucial for a helpful AI agent. Here are some tips:
-
-### Be Specific About Your Product
-```
-You are a support agent for Acme Software, a project management tool
-for remote teams. Our main features include task boards, time tracking,
-and team chat.
-```
-
-### Define the Tone
-```
-Be friendly and professional. Use simple language and avoid technical
-jargon unless the user demonstrates technical knowledge.
-```
-
-### Set Boundaries
-```
-Only answer questions about Acme Software. If asked about competitors
-or unrelated topics, politely redirect the conversation to how you can
-help with our product.
-```
-
-### Include Key Information
-```
-Our pricing: Free tier (up to 5 users), Pro ($10/user/month),
-Enterprise (contact sales). Free trial is 14 days.
-```
-
-### Handle Edge Cases
-```
-If you don't know the answer, say so honestly and offer to connect
-the user with our support team at support@acme.com.
-```
-
----
-
-## Best Practices
-
-| Do | Don't |
-|---|---|
-| Keep instructions clear and concise | Write overly long prompts |
-| Test with real user questions | Assume the first prompt is perfect |
-| Update as your product evolves | Set and forget |
-| Include specific product details | Be vague about capabilities |
-
----
-
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
-  </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
-  </Card>
-</CardGroup>
+- **Be specific** about your product, not generic
+- **Set boundaries** for what the agent should/shouldn't discuss
+- **Include key info** like pricing, features, common solutions
+- **Test edge cases** in the preview before going live

@@ -1,208 +1,90 @@
 ---
 title: "OpenAPI"
-description: "Connect your REST API using an OpenAPI specification"
+description: "Connect your REST API"
 ---
 
-Connect your REST API to Crow by uploading an OpenAPI (Swagger) specification. This allows your AI agent to call your API endpoints to help users.
+Upload an OpenAPI (Swagger) spec to let your agent call your API endpoints.
 
----
+## Setup
 
-## What is OpenAPI?
+### 1. Configure Connection
 
-OpenAPI is a standard format for describing REST APIs. If you have an API, you likely already have an OpenAPI spec (also known as a Swagger spec). It's typically a `.json` or `.yaml` file that describes your endpoints, parameters, and responses.
+In **Integration** → **OpenAPI**:
 
----
+| Field | Description |
+|-------|-------------|
+| **Base URL** | Your API root (e.g., `https://api.yourcompany.com/v1`) |
+| **Auth Type** | None, API Key, Bearer Token, or JWT Forward |
 
-## Setting Up OpenAPI Integration
+### 2. Configure Auth
 
-### Step 1: Configure API Connection
+<CodeGroup>
 
-Before uploading your spec, configure how Crow should connect to your API:
-
-**Base URL**
-Enter the base URL of your API:
+```text API Key
+Header name: X-API-Key
+Value: your-secret-key
 ```
-https://api.yourcompany.com/v1
+
+```text Bearer Token
+Value: your-bearer-token
 ```
 
-**Authentication Type**
-Choose how to authenticate requests:
+```text JWT Forward
+No config needed—token comes from authenticated widget user.
+Requires Identity Verification setup.
+```
 
-| Type | Description | Use When |
-|------|-------------|----------|
-| **None** | No authentication | Public APIs |
-| **API Key** | Custom header with secret key | Most private APIs |
-| **Bearer Token** | Authorization header with token | OAuth/JWT APIs |
-| **JWT Forward** | Forward user's identity token | User-specific operations |
+</CodeGroup>
 
-### Step 2: Configure Authentication
+### 3. Upload Spec
 
-Depending on your authentication type:
+Drag and drop your `.json` or `.yaml` OpenAPI spec file.
 
-**API Key**
-- Enter the header name (e.g., `X-API-Key`)
-- Enter your secret API key
+### 4. Enable Tools
 
-**Bearer Token**
-- Enter your bearer token value
-
-**JWT Forward**
-- User's identity token is automatically forwarded
-- Requires [Identity Verification](/identity-verification) to be set up
-
-<Warning>
-JWT Forward only works for authenticated users. Anonymous users won't have a token to forward.
-</Warning>
-
-### Step 3: Upload OpenAPI Spec
-
-Drag and drop or click to upload your OpenAPI specification file (`.json` or `.yaml`).
-
-After upload, you'll see:
-- Confirmation that the spec was parsed successfully
-- Number of tools (operations) discovered
-- Link to configure which tools to enable
+Go to **Actions** → **API Tools** and select which endpoints to enable.
 
 ---
 
-## Selecting Tools
-
-After uploading your spec, go to **Actions > API Tools** to select which operations your agent can use.
-
-You don't need to enable every endpoint. Only enable operations that are relevant to customer support scenarios.
-
----
-
-## Authentication Methods Explained
-
-### API Key
-
-Adds a custom header to every request:
-
-```
-X-API-Key: your-secret-key
-```
-
-Best for: Server-to-server authentication where all requests use the same credentials.
-
-### Bearer Token
-
-Adds an Authorization header:
-
-```
-Authorization: Bearer your-token
-```
-
-Best for: OAuth access tokens or long-lived API tokens.
-
-### JWT Forward
-
-Forwards the user's identity token from your widget:
-
-```
-Authorization: Bearer <user's-jwt-token>
-```
-
-Best for: When your API needs to know which user is making the request. This enables personalized operations like "check my order status" where "my" refers to the specific user.
-
-**Requirements for JWT Forward:**
-- You must implement [Identity Verification](/identity-verification)
-- Your API must validate the same JWT tokens
-- Anonymous users cannot use JWT-forwarded operations
-
----
-
-## Example OpenAPI Spec
-
-Here's a minimal example of an OpenAPI spec that defines an order lookup endpoint:
+## Example Spec
 
 ```yaml
 openapi: 3.0.0
 info:
-  title: My Company API
+  title: My API
   version: 1.0.0
-servers:
-  - url: https://api.mycompany.com/v1
 paths:
   /orders/{orderId}:
     get:
       operationId: getOrder
       summary: Get order details
-      description: Retrieve details about a specific order
       parameters:
         - name: orderId
           in: path
           required: true
           schema:
             type: string
-          description: The order ID to look up
       responses:
         '200':
           description: Order details
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  status:
-                    type: string
-                  total:
-                    type: number
 ```
 
----
+## Tips
 
-## Best Practices
-
-### Write Good Descriptions
-The `summary` and `description` fields help your agent understand when to use each endpoint. Be descriptive:
-
-```yaml
-summary: Get order details
-description: Retrieve details about a specific order including status, items, shipping info, and total cost
-```
-
-### Use Clear Operation IDs
-The `operationId` becomes the tool name your agent sees. Use descriptive names:
-- Good: `getOrderStatus`, `createSupportTicket`
-- Bad: `get1`, `post_endpoint`
-
-### Limit Scope
-Don't expose sensitive or destructive operations. Your agent doesn't need access to `deleteUser` or `resetDatabase`.
-
-### Test in Sandbox
-After setup, test in the Sandbox to ensure your agent can successfully call your API.
-
----
+- Use descriptive `summary` and `description` fields
+- Use clear `operationId` names (`getOrderStatus` not `get1`)
+- Only expose safe operations
 
 ## Troubleshooting
 
-### Spec Won't Upload
-- Ensure the file is valid JSON or YAML
-- Validate your spec at [editor.swagger.io](https://editor.swagger.io)
-- Check for syntax errors
-
-### API Calls Failing
-- Verify the base URL is correct and accessible
-- Check authentication credentials
-- Ensure the API is reachable from Crow's servers
-
-### Agent Not Using API
-- Enable the tools in **Actions > API Tools**
-- Test with specific questions that should trigger API calls
-- Check that the tool descriptions match user queries
+| Issue | Solution |
+|-------|----------|
+| Spec won't upload | Validate at [editor.swagger.io](https://editor.swagger.io) |
+| API calls failing | Check base URL and auth credentials |
+| Agent not using API | Enable tools in Actions, test in Sandbox |
 
 ---
 
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
-  </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
-  </Card>
-</CardGroup>
+<Card title="OpenAPI Authentication" icon="key" href="/openapi-authentication">
+  Detailed auth guide including JWT Forward
+</Card>

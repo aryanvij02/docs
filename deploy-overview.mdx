@@ -1,163 +1,56 @@
 ---
 title: "Deploy"
-description: "Deploy your AI agent to your website"
+description: "Go live with your agent"
 ---
 
-Once you've configured your agent, it's time to deploy it to your website. The Deploy page provides everything you need to get your widget live.
+## Get Your Embed Code
 
----
-
-## Deployment Overview
-
-Deploying Crow involves:
-
-1. **Embed the script** — Add a script tag to your website
-2. **Configure security** — Set up identity verification (optional)
-3. **Go live** — Your users can start chatting
-
----
-
-## Embed Script
-
-The Deploy page shows your unique embed code:
+**Dashboard** → **Setup** → **Embed Widget**
 
 ```html
 <script
-  src="https://widget.usecrow.ai/crow-widget.js"
-  data-product-id="your-product-id"
+  src="https://api.usecrow.org/static/crow-widget.js"
+  data-api-url="https://api.usecrow.org"
+  data-product-id="YOUR_PRODUCT_ID"
 ></script>
 ```
 
-### Adding to Your Website
+## Get Your Security Key
 
-Copy the script and add it to your website:
-
-**HTML**
-```html
-<!-- Add before </body> -->
-<script
-  src="https://widget.usecrow.ai/crow-widget.js"
-  data-product-id="your-product-id"
-></script>
-```
-
-**React / Next.js**
-```jsx
-import Script from 'next/script'
-
-export default function Layout({ children }) {
-  return (
-    <>
-      {children}
-      <Script
-        src="https://widget.usecrow.ai/crow-widget.js"
-        data-product-id="your-product-id"
-        strategy="afterInteractive"
-      />
-    </>
-  )
-}
-```
-
-For more detailed integration instructions, see the [Embed Widget Guide](/embed-widget).
-
----
-
-## Security Key
-
-The Security Key is used for identity verification. This allows you to authenticate users so the agent knows who they are.
-
-### Viewing Your Key
-
-Your security key is hidden by default. Click the eye icon to reveal it.
-
-### Using the Key
-
-Use this key on your backend to sign JWT tokens for identity verification. Never expose this key in client-side code.
-
-For implementation details, see the [Identity Verification Guide](/identity-verification).
+Same page—click the eye icon to reveal. Use this to sign JWTs for [Identity Verification](/identity-verification).
 
 <Warning>
-Keep your security key secret. If compromised, regenerate it immediately from the Crow Dashboard.
+Keep your security key secret. Never expose in client-side code.
 </Warning>
 
----
+## Pre-launch Checklist
 
-## Pre-Deployment Checklist
+**Agent**
+- [ ] Name and instructions configured
+- [ ] Tested in Sandbox
 
-Before going live, verify:
+**Knowledge Base**
+- [ ] Docs uploaded / website crawled / Notion connected
+- [ ] Agent answers common questions correctly
 
-### Agent Configuration
-- [ ] Agent name is set appropriately
-- [ ] System prompt is complete and tested
-- [ ] Responses are accurate in Sandbox testing
+**Integrations** (if applicable)
+- [ ] OpenAPI spec uploaded
+- [ ] Auth configured
+- [ ] Tools enabled in Actions
 
-### Knowledge Base
-- [ ] Relevant documents are uploaded
-- [ ] Website is crawled (if applicable)
-- [ ] Notion is connected (if applicable)
-- [ ] Agent can answer common questions
+**Identity** (if applicable)
+- [ ] JWT endpoint implemented
+- [ ] `identify()` called in frontend
+- [ ] `resetUser()` called on logout
 
-### Integrations
-- [ ] OpenAPI spec is uploaded (if using)
-- [ ] API authentication is configured
-- [ ] MCP servers are connected (if using)
+## Test in Production
 
-### Actions
-- [ ] Appropriate tools are enabled
-- [ ] Workflows are set up and tested
-- [ ] Sensitive operations are disabled
+1. Visit your site—widget should appear
+2. Test as anonymous user
+3. Test as authenticated user (if applicable)
+4. Try common questions
+5. Verify tool actions work
 
-### Security (if applicable)
-- [ ] Identity verification is implemented
-- [ ] JWT tokens are being generated correctly
-- [ ] Authenticated users are recognized
+## Monitor
 
----
-
-## Testing in Production
-
-After deploying:
-
-1. **Visit your site** — Check that the widget appears
-2. **Test as anonymous user** — Verify basic functionality
-3. **Test as authenticated user** — Verify identity is recognized
-4. **Try common questions** — Ensure accurate responses
-5. **Test integrations** — Verify tools work correctly
-
----
-
-## Monitoring After Launch
-
-Once live, use the [Activity](/activity-overview) page to:
-
-- Monitor conversation volume
-- Identify issues quickly
-- Spot common questions
-- Improve your agent over time
-
----
-
-## Documentation
-
-<CardGroup cols={2}>
-  <Card title="Embed Widget" icon="code" href="/embed-widget">
-    Detailed embedding instructions and customization options.
-  </Card>
-  <Card title="Identity Verification" icon="user-check" href="/identity-verification">
-    Authenticate users for personalized experiences.
-  </Card>
-</CardGroup>
-
----
-
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card title="Email Support" icon="envelope" href="mailto:support@usecrow.ai">
-    support@usecrow.ai
-  </Card>
-  <Card title="Book a Call" icon="calendar" href="https://cal.com/aryan-vij-wpimwt/30min">
-    Schedule a 30-minute call
-  </Card>
-</CardGroup>
+Use [Activity](/activity-overview) to track conversations and spot issues.
