@@ -63,12 +63,16 @@ security:
 
 ## JWT Forward
 
-Your agent forwards the user's identity token to your API. This enables user-specific actions like "check my orders" or "cancel my subscription."
+Your agent forwards the user's Crow identity token to your API. This enables user-specific actions like "check my orders" or "cancel my subscription."
+
+<Note>
+This is **not** your app's session JWT. It's a Crow-scoped identity token your backend mints with `CROW_VERIFICATION_SECRET`. See [Identity Verification](/identity-verification).
+</Note>
 
 **How it works:**
 
 ```
-1. Your backend signs a JWT for the user (Identity Verification)
+1. Your backend mints a Crow identity token (JWT signed with Crow secret)
 2. Frontend passes it to widget: window.crow('identify', { token })
 3. When calling your API, Crow forwards that same token
 4. Your API verifies it (same secret) and identifies the user

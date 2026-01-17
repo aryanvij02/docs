@@ -18,10 +18,14 @@ Identity verification lets your agent know who the user is—enabling personaliz
 
 ```
 1. User logs into YOUR app
-2. Your backend generates a JWT signed with your Crow secret
+2. Your backend mints a Crow identity token (JWT signed with your Crow secret)
 3. Your frontend calls window.crow('identify', { token })
 4. Widget now knows who the user is
 ```
+
+<Note>
+This is **not** your app's session JWT. It's a separate Crow-scoped identity token that your backend mints specifically for Crow. Your app JWT stays private.
+</Note>
 
 ---
 
@@ -158,7 +162,18 @@ function App() {
 
 ---
 
-## 4. Handle Logout
+## 4. Refresh Before Expiry
+
+Crow forwards the token as-is—if it's expired, your API will 401. Refresh proactively:
+
+```javascript
+// Refresh every 50 minutes (token expires in 60)
+setInterval(identifyToCrow, 50 * 60 * 1000)
+```
+
+---
+
+## 5. Handle Logout
 
 ```javascript
 function handleLogout() {
