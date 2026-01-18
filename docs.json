@@ -50,6 +50,11 @@
       {
         "label": "Dashboard",
         "href": "https://app.usecrow.ai"
+      },
+      {
+        "label": "Discord",
+        "href": "https://discord.gg/sJtyHyvhEn",
+        "icon": "discord"
       }
     ],
     "primary": {
@@ -60,7 +65,8 @@
   },
   "footer": {
     "socials": {
-      "website": "https://usecrow.ai"
+      "website": "https://usecrow.ai",
+      "discord": "https://discord.gg/sJtyHyvhEn"
     }
   }
 }
