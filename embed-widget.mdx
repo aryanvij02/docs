@@ -136,6 +136,19 @@ window.crow('registerTools', {
 })
 ```
 
+<Accordion title="React/SPA">
+```javascript
+useEffect(() => {
+  const i = setInterval(() => {
+    if (!window.crow) return
+    window.crow('registerTools', { /* your tools */ })
+    clearInterval(i)
+  }, 100)
+  return () => clearInterval(i)
+}, [])
+```
+</Accordion>
+
 <Note>
 Client tools run in the browser. Currently fire-and-forget—the agent triggers them but doesn't see the return value. Interested in bidirectional tool results? [Book a demo](https://cal.com/aryan-vij-wpimwt/30min).
 </Note>
