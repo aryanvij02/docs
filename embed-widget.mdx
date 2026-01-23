@@ -13,6 +13,7 @@ description: "Add the Crow widget to your website"
   src="https://api.usecrow.org/static/crow-widget.js"
   data-api-url="https://api.usecrow.org"
   data-product-id="YOUR_PRODUCT_ID"
+  data-agent-name="Your Agent Name"
 ></script>
 ```
 
@@ -28,6 +29,7 @@ export default function Layout({ children }) {
         src="https://api.usecrow.org/static/crow-widget.js"
         data-api-url="https://api.usecrow.org"
         data-product-id="YOUR_PRODUCT_ID"
+        data-agent-name="Your Agent Name"
         strategy="afterInteractive"
       />
     </>
@@ -44,6 +46,7 @@ onMounted(() => {
   script.src = 'https://api.usecrow.org/static/crow-widget.js'
   script.setAttribute('data-api-url', 'https://api.usecrow.org')
   script.setAttribute('data-product-id', 'YOUR_PRODUCT_ID')
+  script.setAttribute('data-agent-name', 'Your Agent Name')
   document.body.appendChild(script)
 })
 </script>
@@ -58,6 +61,7 @@ onMounted(() => {
     script.src = 'https://api.usecrow.org/static/crow-widget.js'
     script.setAttribute('data-api-url', 'https://api.usecrow.org')
     script.setAttribute('data-product-id', 'YOUR_PRODUCT_ID')
+    script.setAttribute('data-agent-name', 'Your Agent Name')
     document.body.appendChild(script)
   })
 </script>
@@ -72,6 +76,7 @@ onMounted(() => {
 | `src` | Yes | Widget script URL |
 | `data-api-url` | Yes | `https://api.usecrow.org` |
 | `data-product-id` | Yes | Your product ID from dashboard |
+| `data-agent-name` | No | Display name for your agent (defaults to "Assistant") |
 
 ## Find Your Product ID
 
