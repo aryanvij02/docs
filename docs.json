@@ -23,16 +23,16 @@
           },
           {
             "group": "Agent",
-            "pages": ["sandbox-overview", "actions-overview", "workflows"]
+            "pages": ["sandbox-overview", "actions-overview", "workflows", "page-navigation"]
           },
           {
             "group": "Knowledge Base",
             "pages": ["knowledge-base-overview", "files", "website", "notion"]
           },
-{
-          "group": "Integration",
-          "pages": ["integration-overview", "openapi", "openapi-authentication", "client-side-tools", "mcp-servers"]
-        },
+          {
+            "group": "Integration",
+            "pages": ["integration-overview", "openapi", "openapi-authentication", "mcp-servers"]
+          },
           {
             "group": "Monitor",
             "pages": ["activity-overview"]

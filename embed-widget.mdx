@@ -159,6 +159,7 @@ See [Identity Verification](/identity-verification) for backend JWT setup.
 
 Register tools the agent can call. The return value from your handler is sent back to the agent, so it can confirm success or handle errors intelligently.
 
+<<<<<<< Updated upstream
 See [Client-Side Tools](/client-side-tools) for full setup.
 
 <Tabs>
@@ -177,6 +178,25 @@ See [Client-Side Tools](/client-side-tools) for full setup.
     })
     ```
   </Tab>
+=======
+```javascript
+window.crow('registerTools', {
+  getCurrentPage: async () => {
+    return { page: window.location.pathname }
+  },
+  
+  addToCart: async ({ productId, quantity }) => {
+    await yourCartAPI.add(productId, quantity)
+    return { success: true }
+  },
+  
+  showUpgradeModal: async () => {
+    document.getElementById('upgrade-modal').showModal()
+    return { shown: true }
+  }
+})
+```
+>>>>>>> Stashed changes
 
   <Tab title="React SDK">
     ```tsx
