@@ -3,8 +3,35 @@ title: "Introduction"
 description: "Turn your application AI-native with Crow's agent"
 ---
 
+<Card>
+  <div>
+    <p style={{ color: '#666', marginBottom: '12px', fontSize: '14px' }}>Using Cursor? Install in one click:</p>
+    <a 
+      href="cursor://anysphere.cursor-deeplink/mcp/install?name=crow&config=eyJ1cmwiOiJodHRwczovL2RvY3MudXNlY3Jvdy5haS9tY3AifQ%3D%3D"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '8px 14px',
+        borderRadius: '6px',
+        backgroundColor: '#171717',
+        color: '#fff',
+        fontWeight: 500,
+        fontSize: '14px',
+        textDecoration: 'none',
+        border: '1px solid #333'
+      }}
+    >
+      <img src="/cursor_logo.png" alt="Cursor" width="16" height="16" style={{ borderRadius: '3px' }} />
+      Add to Cursor
+    </a>
+  </div>
+</Card>
+
 Crow is an embeddable AI agent that answers questions, takes actions, and knows your product.
 
+<Tabs>
+  <Tab title="Script Tag">
 ```html
 <script
   src="https://api.usecrow.org/static/crow-widget.js"
@@ -12,6 +39,18 @@ Crow is an embeddable AI agent that answers questions, takes actions, and knows 
   data-product-id="YOUR_PRODUCT_ID"
 ></script>
 ```
+  </Tab>
+  <Tab title="React SDK">
+```bash
+npm install @usecrow/client @usecrow/ui
+```
+```jsx
+import { CrowWidget } from '@usecrow/ui';
+
+<CrowWidget productId="YOUR_PRODUCT_ID" apiUrl="https://api.usecrow.org" />
+```
+  </Tab>
+</Tabs>
 
 <CardGroup cols={2}>
   <Card title="Quickstart" icon="play" href="/quickstart">
@@ -19,6 +58,9 @@ Crow is an embeddable AI agent that answers questions, takes actions, and knows 
   </Card>
   <Card title="Identity Verification" icon="fingerprint" href="/identity-verification">
     Authenticate your users
+  </Card>
+  <Card title="Crow Docs MCP" icon="robot" href="/crow-docs-mcp">
+    AI-assisted integration
   </Card>
 </CardGroup>
 
