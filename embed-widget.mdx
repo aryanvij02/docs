@@ -231,6 +231,134 @@ Return meaningful results from your tools. The agent uses these to provide accur
 
 ---
 
+## Quick Q&A
+
+Some users find it more intuitive to read setup instructions in Q&A format. Here's everything above as quick answers:
+
+<AccordionGroup>
+  <Accordion title="How do I add the chat to my app?">
+    Install the SDK and drop in one component:
+
+    ```bash
+    npm install @usecrow/client @usecrow/ui
+    ```
+
+    ```tsx
+    <CrowCopilot
+      productId="YOUR_PRODUCT_ID"
+      apiUrl="https://api.usecrow.org"
+    />
+    ```
+
+    That's it. Chat works anonymously out of the box. No provider wrapping needed.
+  </Accordion>
+
+  <Accordion title="How do I authenticate users?">
+    Two steps:
+
+    1. **Create a backend endpoint** (~15 lines) that reads your existing session and mints a JWT signed with your Crow verification secret. Crow never sees your auth system — the JWT is the bridge.
+
+    2. **Pass it as a prop:**
+
+    ```tsx
+    <CrowCopilot
+      productId="YOUR_PRODUCT_ID"
+      apiUrl="https://api.usecrow.org"
+      getIdentityToken={async () => {
+        const res = await fetch('/api/crow-token');
+        const { token } = await res.json();
+        return token;
+      }}
+    />
+    ```
+
+    The SDK calls this on mount and auto-refreshes when the token expires. No `useEffect`, no `setInterval`, no manual calls.
+
+    This enables: conversation history, personalized responses, and user-specific tool actions.
+
+    See [Identity Verification](/identity-verification) for the backend JWT setup.
+  </Accordion>
+
+  <Accordion title="How do I give the AI context about the current page?">
+    Pass a `context` object. It's reactive — when it changes (e.g., user navigates), the AI automatically knows.
+
+    ```tsx
+    const context = useMemo(() => {
+      const match = pathname.match(/\/items\/([^/]+)/);
+      return match ? { itemId: match[1] } : {};
+    }, [pathname]);
+
+    <CrowCopilot
+      ...
+      context={context}
+    />
+    ```
+
+    This gets injected into the AI's system prompt so it can perform page-aware actions like "edit this item" without asking which one.
+  </Accordion>
+
+  <Accordion title="How do I handle SPA navigation for links?">
+    Pass your router's push function:
+
+    ```tsx
+    <CrowCopilot
+      ...
+      navigate={(path) => router.push(path)}
+    />
+    ```
+
+    Internal links the AI returns will use your SPA router instead of a full page reload.
+  </Accordion>
+
+  <Accordion title="How do I react when the AI calls a tool?">
+    Use `onToolResult` to trigger side effects (show a diff UI, refresh data, etc.):
+
+    ```tsx
+    <CrowCopilot
+      ...
+      onToolResult={(toolName, result) => {
+        if (toolName === 'propose_revision') {
+          showDiffUI(result);
+        }
+      }}
+    />
+    ```
+
+    Use `toolRenderers` for custom inline components in the chat (charts, previews):
+
+    ```tsx
+    <CrowCopilot
+      ...
+      toolRenderers={{
+        query_chart: ({ result }) => <MyChart data={result.data} />,
+      }}
+    />
+    ```
+  </Accordion>
+
+  <Accordion title="What does the full setup look like?">
+    Everything is a prop on one component:
+
+    ```tsx
+    <CrowCopilot
+      productId="..."
+      apiUrl="https://api.usecrow.org"
+      getIdentityToken={fetchToken}
+      context={{ itemId: "abc-123" }}
+      navigate={(path) => router.push(path)}
+      onToolResult={(name, result) => ...}
+      toolRenderers={{ ... }}
+      variant="floating"
+      position="right"
+    />
+    ```
+
+    No providers, no initializers, no polling.
+  </Accordion>
+</AccordionGroup>
+
+---
+
 ## Troubleshooting
 
 | Issue | Solution |
