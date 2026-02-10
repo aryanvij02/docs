@@ -48,6 +48,18 @@ Choose your preferred installation method:
     | `data-api-url` | Yes | `https://api.usecrow.org` |
     | `data-product-id` | Yes | Your product ID from dashboard |
     | `data-agent-name` | No | Display name (defaults to "Assistant") |
+    | `data-variant` | No | `widget` (default) or `copilot` |
+
+    After the script loads, use `window.crow()` to pass functions and objects:
+
+    | Command | Description |
+    |---------|-------------|
+    | `setIdentityTokenFetcher` | Auto-refreshing JWT function. See [Identity](#user-identity) |
+    | `setContext` | Page context object. See [Context](#page-context) |
+    | `onToolResult` | Callback on tool completion. See [Callbacks](#tool-result-callbacks) |
+    | `registerToolRenderers` | Custom inline visuals. See [Renderers](#tool-renderers) |
+    | `identify` | Manual JWT token (alternative to fetcher) |
+    | `registerTools` | Client-side tool handlers |
   </Tab>
 
   <Tab title="React SDK">
@@ -135,6 +147,18 @@ Authenticate users for persistent conversations and user-specific actions.
 
 <Tabs>
   <Tab title="Script Tag">
+    **Option A — Auto-refresh (recommended).** Pass a function that fetches a JWT. The SDK calls it on mount and re-calls it automatically when the token expires (401):
+
+    ```javascript
+    window.crow('setIdentityTokenFetcher', async () => {
+      const res = await fetch('/api/crow-token');
+      const { token } = await res.json();
+      return token;
+    });
+    ```
+
+    **Option B — Manual.** Pass a static token (you handle refresh yourself):
+
     ```javascript
     window.crow('identify', {
       token: 'jwt-from-your-backend',  // Required
@@ -231,6 +255,129 @@ Return meaningful results from your tools. The agent uses these to provide accur
 
 ---
 
+## Page Context
+
+Give the AI context about the current page so it can perform page-aware actions.
+
+<Tabs>
+  <Tab title="Script Tag">
+    ```javascript
+    window.crow('setContext', { itemId: 'abc-123', page: 'settings' });
+
+    // Update on navigation:
+    window.addEventListener('popstate', () => {
+      window.crow('setContext', { page: location.pathname });
+    });
+    ```
+  </Tab>
+
+  <Tab title="React SDK">
+    Pass a `context` object — it's reactive and updates automatically:
+
+    ```tsx
+    const context = useMemo(() => {
+      const match = pathname.match(/\/items\/([^/]+)/);
+      return match ? { itemId: match[1] } : {};
+    }, [pathname]);
+
+    <CrowWidget context={context} ... />
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Tool Result Callbacks
+
+React to server-side tool completions — refresh data, show a diff UI, dispatch events, etc.
+
+<Tabs>
+  <Tab title="Script Tag">
+    ```javascript
+    window.crow('onToolResult', (toolName, result) => {
+      if (toolName === 'propose_revision') {
+        showDiffUI(result);
+      }
+    });
+    ```
+  </Tab>
+
+  <Tab title="React SDK">
+    ```tsx
+    <CrowWidget
+      onToolResult={(toolName, result) => {
+        if (toolName === 'propose_revision') showDiffUI(result);
+      }}
+      ...
+    />
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Tool Renderers
+
+Render custom visuals inline in the chat when a tool completes (charts, previews, cards).
+
+<Tabs>
+  <Tab title="Script Tag">
+    Script-tag renderers return an **HTML string**. Use inline `style` attributes (Tailwind classes won't work inside the widget's Shadow DOM):
+
+    ```javascript
+    window.crow('registerToolRenderers', {
+      query_analytics_chart: ({ result }) => {
+        const r = result || {};
+        const color = r.changePercent > 0 ? '#059669' : '#ef4444';
+        const arrow = r.changePercent > 0 ? '↑' : '↓';
+        return `<div style="padding:12px; border:1px solid #e2e8f0; border-radius:8px; background:#fff; font-family:system-ui,sans-serif;">
+          <div style="font-size:13px; font-weight:600; color:#0f172a;">${r.title || 'Chart'}</div>
+          <div style="font-size:24px; font-weight:700; color:#2563eb; margin-top:4px;">${r.currentValue || 'N/A'}</div>
+          ${r.changePercent != null
+            ? `<div style="font-size:12px; color:${color};">${arrow} ${Math.abs(r.changePercent).toFixed(1)}%</div>`
+            : ''}
+        </div>`;
+      }
+    });
+    ```
+
+    <Warning>
+    **Timing:** `window.crow()` must be called **after** `crow-widget.js` has loaded. In plain HTML this happens naturally (scripts execute in order). In Next.js, use `onLoad`:
+
+    ```jsx
+    <Script
+      src="https://api.usecrow.org/static/crow-widget.js"
+      data-product-id="YOUR_PRODUCT_ID"
+      data-api-url="https://api.usecrow.org"
+      strategy="afterInteractive"
+      onLoad={() => {
+        window.crow('registerToolRenderers', { ... });
+      }}
+    />
+    ```
+    </Warning>
+
+    <Tip>
+    The widget uses Shadow DOM for CSS isolation. Use inline `style` attributes in your HTML strings — Tailwind classes and external CSS won't apply inside the widget.
+    </Tip>
+  </Tab>
+
+  <Tab title="React SDK">
+    React SDK renderers return **JSX** — full React components with hooks, state, and libraries like Recharts:
+
+    ```tsx
+    <CrowCopilot
+      toolRenderers={{
+        query_analytics_chart: ({ result }) => <MyChart data={result.data} />,
+      }}
+      ...
+    />
+    ```
+  </Tab>
+</Tabs>
+
+---
+
 ## Quick Q&A
 
 Some users find it more intuitive to read setup instructions in Q&A format. Here's everything above as quick answers:
@@ -311,28 +458,29 @@ Some users find it more intuitive to read setup instructions in Q&A format. Here
   </Accordion>
 
   <Accordion title="How do I react when the AI calls a tool?">
-    Use `onToolResult` to trigger side effects (show a diff UI, refresh data, etc.):
+    **React SDK** — use `onToolResult` and `toolRenderers` as props:
 
     ```tsx
     <CrowCopilot
-      ...
       onToolResult={(toolName, result) => {
-        if (toolName === 'propose_revision') {
-          showDiffUI(result);
-        }
+        if (toolName === 'propose_revision') showDiffUI(result);
       }}
-    />
-    ```
-
-    Use `toolRenderers` for custom inline components in the chat (charts, previews):
-
-    ```tsx
-    <CrowCopilot
-      ...
       toolRenderers={{
         query_chart: ({ result }) => <MyChart data={result.data} />,
       }}
     />
+    ```
+
+    **Script Tag** — use `window.crow()`:
+
+    ```javascript
+    window.crow('onToolResult', (toolName, result) => {
+      if (toolName === 'propose_revision') showDiffUI(result);
+    });
+
+    window.crow('registerToolRenderers', {
+      query_chart: ({ result }) => `<div>${result.title}: ${result.value}</div>`,
+    });
     ```
   </Accordion>
 
