@@ -60,6 +60,8 @@ Choose your preferred installation method:
     | `registerToolRenderers` | Custom inline visuals. See [Renderers](#tool-renderers) |
     | `identify` | Manual JWT token (alternative to fetcher) |
     | `registerTools` | Client-side tool handlers |
+    | `open` | Programmatically open/expand the widget or copilot |
+    | `close` | Programmatically close/collapse the widget or copilot |
   </Tab>
 
   <Tab title="React SDK">
@@ -456,6 +458,23 @@ Your renderer receives `{ result, status }` and returns one of:
     ```
   </Tab>
 </Tabs>
+
+---
+
+## Programmatic Open / Close
+
+Open or close the widget from your own code — useful for onboarding flows, feature tours, or reacting to in-app events.
+
+```javascript
+window.crow('open');   // expand the widget / sidebar
+window.crow('close');  // collapse it
+```
+
+Works with both the floating widget and the copilot sidebar.
+
+<Tip>
+`window.crow('open')` works from anywhere — event handlers, `useEffect`, timeouts, or third-party callbacks. No imports needed.
+</Tip>
 
 ---
 
