@@ -23,11 +23,11 @@
           },
           {
             "group": "Agent",
-            "pages": ["sandbox-overview", "actions-overview", "workflows", "page-navigation"]
+            "pages": ["sandbox-overview", "actions-overview", "user-suggestions", "workflows", "page-navigation"]
           },
           {
             "group": "Knowledge Base",
-            "pages": ["knowledge-base-overview", "files", "website", "notion"]
+            "pages": ["knowledge-base-overview", "files", "website"]
           },
           {
             "group": "Integration",
