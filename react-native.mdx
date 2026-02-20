@@ -1,0 +1,429 @@
+---
+title: "React Native"
+description: "Add Crow to your React Native app"
+---
+
+The `@usecrow/client` SDK works natively in React Native. You build your own chat UI with native components while the SDK handles streaming, auth, tools, and conversation persistence.
+
+<Note>
+Unlike the web widget which ships a pre-built UI (`@usecrow/ui`), React Native requires you to build the chat interface with your own components. The SDK provides the headless logic — messaging, streaming, identity, tools, and conversations.
+</Note>
+
+## Installation
+
+```bash
+npm install @usecrow/client
+```
+
+For conversation persistence across app restarts, also install AsyncStorage:
+
+```bash
+npx expo install @react-native-async-storage/async-storage
+```
+
+---
+
+## Quick Start
+
+```tsx
+import { CrowClient, createMemoryStorageAdapter, parseSSEChunk, parseSSEData } from '@usecrow/client';
+import type { StreamReader } from '@usecrow/client';
+
+// React Native needs a custom stream reader since
+// Response.body.getReader() is not available
+const rnStreamReader: StreamReader = async function* (response, signal) {
+  const text = await response.text();
+  let acc = '';
+  for (const data of parseSSEChunk(text)) {
+    if (signal?.aborted) return;
+    const event = parseSSEData(data);
+    if (event) {
+      if (event.type === 'content') {
+        acc += event.text;
+        yield { ...event, accumulated: acc };
+      } else {
+        yield event;
+      }
+      if (event.type === 'done') return;
+    }
+  }
+};
+
+const client = new CrowClient({
+  productId: 'YOUR_PRODUCT_ID',
+  apiUrl: 'https://api.usecrow.org',
+  storage: createMemoryStorageAdapter(),
+  streamReader: rnStreamReader,
+  enableBrowserTools: false,
+});
+```
+
+| Option | Required | Description |
+|--------|----------|-------------|
+| `productId` | Yes | Your product ID from dashboard |
+| `apiUrl` | Yes | `https://api.usecrow.org` |
+| `storage` | No | Storage adapter for conversation persistence. Defaults to memory |
+| `streamReader` | Yes | Custom SSE reader (React Native doesn't support `ReadableStream`) |
+| `enableBrowserTools` | No | Set to `false` — browser tools don't apply to native apps |
+
+---
+
+## Sending Messages
+
+The client manages message state and exposes it via callbacks:
+
+```tsx
+function useChat(client: CrowClient) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const u1 = client.onMessages(setMessages);
+    const u2 = client.onLoading(setIsLoading);
+    return () => { u1(); u2(); };
+  }, [client]);
+
+  const sendMessage = async (text: string) => {
+    for await (const _ of client.sendMessage(text)) {}
+  };
+
+  return { messages, isLoading, sendMessage };
+}
+```
+
+Each `Message` has:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique message ID |
+| `role` | `'user' \| 'assistant'` | Who sent the message |
+| `content` | `string` | Message text (streams in progressively for assistant messages) |
+| `timestamp` | `Date` | When the message was created |
+| `thinking` | `string?` | Agent's reasoning trace (if extended thinking is enabled) |
+
+---
+
+## Conversation Persistence
+
+By default, `createMemoryStorageAdapter()` loses state when the app is closed. To persist conversations across restarts, use AsyncStorage:
+
+```tsx
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { StorageAdapter } from '@usecrow/client';
+
+function createAsyncStorageAdapter(): StorageAdapter {
+  const cache = new Map<string, string>();
+  return {
+    getItem: (key) => cache.get(key) ?? null,
+    setItem: (key, value) => {
+      cache.set(key, value);
+      AsyncStorage.setItem(key, value);
+    },
+    removeItem: (key) => {
+      cache.delete(key);
+      AsyncStorage.removeItem(key);
+    },
+  };
+}
+```
+
+<Note>
+The `StorageAdapter` interface is synchronous, but AsyncStorage is async. The adapter uses an in-memory cache for synchronous reads while persisting writes in the background. You must preload the cache before creating the client.
+</Note>
+
+Preload the cache on app startup:
+
+```tsx
+const PRODUCT_ID = 'YOUR_PRODUCT_ID';
+
+async function boot() {
+  const adapter = createAsyncStorageAdapter();
+
+  // Prime cache from AsyncStorage before client creation
+  const pairs = await AsyncStorage.multiGet([`crow_conv_${PRODUCT_ID}`]);
+  for (const [key, value] of pairs) {
+    if (value !== null) adapter.setItem(key, value);
+  }
+
+  const client = new CrowClient({
+    productId: PRODUCT_ID,
+    apiUrl: 'https://api.usecrow.org',
+    storage: adapter,
+    streamReader: rnStreamReader,
+    enableBrowserTools: false,
+  });
+
+  // Restore previous conversation messages
+  const savedId = adapter.getItem(`crow_conv_${PRODUCT_ID}`);
+  if (savedId) {
+    await client.switchConversation(savedId);
+  }
+
+  return client;
+}
+```
+
+---
+
+## User Identity
+
+Identify users to enable persistent conversation history and personalized responses.
+
+```tsx
+// After your app authenticates the user, mint a Crow identity token
+// on your backend (see Identity Verification docs) and pass it:
+client.identify({
+  token: jwtFromYourBackend,
+  name: 'Jane Doe',       // Optional
+  email: 'jane@acme.com', // Optional
+});
+
+// On logout
+client.resetUser();
+```
+
+Once identified, you can fetch the user's conversation list:
+
+```tsx
+const conversations = await client.getConversations();
+// [{ id: '...', name: '...', updated_at: '...' }, ...]
+
+// Load a previous conversation
+await client.switchConversation(conversationId);
+```
+
+See [Identity Verification](/identity-verification) for how to generate tokens on your backend.
+
+---
+
+## Client-Side Tools
+
+Register tools that run natively in your app — navigation, deep links, cart operations, etc.
+
+### 1. Register Handlers
+
+```tsx
+client.registerTools({
+  navigateToPage: async ({ page }) => {
+    navigation.navigate(page);
+    return { status: 'success', data: { navigated_to: page } };
+  },
+  addToCart: async ({ productId, quantity }) => {
+    await cartStore.add(productId, quantity);
+    return { status: 'success', data: { added: productId } };
+  },
+});
+```
+
+### 2. Upload Tool Definitions
+
+On the [Actions](https://app.usecrow.ai/actions) page, upload JSON so the agent knows the tool exists:
+
+```json
+[{
+  "name": "navigateToPage",
+  "description": "Navigate to a page in the app",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "page": { "type": "string", "description": "Page name to navigate to" }
+    },
+    "required": ["page"]
+  }
+}]
+```
+
+The handler contract is the same as the web SDK:
+
+| Outcome | Return value |
+|---------|-------------|
+| **Success** | `{ status: "success", ...data }` |
+| **Failure** | `{ status: "error", error: "message" }` |
+
+---
+
+## Page Context
+
+Send app state with every message so the agent knows where the user is:
+
+```tsx
+client.setContext({
+  currentScreen: 'ProductDetail',
+  productId: '123',
+  cartItems: 3,
+});
+```
+
+The context is included with every message and cleared with `client.clearContext()`.
+
+---
+
+## Event Callbacks
+
+Subscribe to lifecycle events:
+
+```tsx
+client.on({
+  onMessage: (message) => {
+    // New message added
+  },
+  onError: (error) => {
+    // Stream or network error
+  },
+  onVerificationStatus: (isVerified) => {
+    // Server confirmed user identity
+  },
+  onToolCall: (event) => {
+    // Tool was called (start, complete, or client-side)
+  },
+});
+```
+
+---
+
+## Full Example
+
+Here's a minimal but complete React Native chat screen:
+
+```tsx
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  View, Text, FlatList, TextInput,
+  TouchableOpacity, StyleSheet,
+} from 'react-native';
+import { CrowClient, parseSSEChunk, parseSSEData, createMemoryStorageAdapter } from '@usecrow/client';
+import type { Message, StreamReader } from '@usecrow/client';
+
+const rnStreamReader: StreamReader = async function* (response, signal) {
+  const text = await response.text();
+  let acc = '';
+  for (const data of parseSSEChunk(text)) {
+    if (signal?.aborted) return;
+    const event = parseSSEData(data);
+    if (event) {
+      if (event.type === 'content') {
+        acc += event.text;
+        yield { ...event, accumulated: acc };
+      } else {
+        yield event;
+      }
+      if (event.type === 'done') return;
+    }
+  }
+};
+
+const client = new CrowClient({
+  productId: 'YOUR_PRODUCT_ID',
+  apiUrl: 'https://api.usecrow.org',
+  storage: createMemoryStorageAdapter(),
+  streamReader: rnStreamReader,
+  enableBrowserTools: false,
+});
+
+export default function ChatScreen() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [input, setInput] = useState('');
+  const listRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    const u1 = client.onMessages(setMessages);
+    const u2 = client.onLoading(setIsLoading);
+    return () => { u1(); u2(); };
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 0)
+      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+  }, [messages]);
+
+  const handleSend = async () => {
+    const text = input.trim();
+    if (!text || isLoading) return;
+    setInput('');
+    for await (const _ of client.sendMessage(text)) {}
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        ref={listRef}
+        data={messages}
+        keyExtractor={(m) => m.id}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 16 }}
+        renderItem={({ item }) => (
+          <View style={[
+            styles.bubble,
+            item.role === 'user' ? styles.userBubble : styles.botBubble,
+          ]}>
+            <Text style={{
+              color: item.role === 'user' ? '#000' : '#fff',
+              fontSize: 15,
+            }}>
+              {item.content || (isLoading ? 'Thinking...' : '')}
+            </Text>
+          </View>
+        )}
+      />
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.input}
+          value={input}
+          onChangeText={setInput}
+          placeholder="Type your message..."
+          onSubmitEditing={handleSend}
+          returnKeyType="send"
+        />
+        <TouchableOpacity
+          onPress={isLoading ? () => client.stop() : handleSend}
+          style={[styles.sendBtn, { backgroundColor: isLoading ? '#ef4444' : '#000' }]}
+        >
+          <Text style={{ color: '#fff', fontWeight: '600' }}>
+            {isLoading ? '■' : '↑'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#fff' },
+  bubble: { maxWidth: '80%', padding: 12, borderRadius: 16, marginBottom: 12 },
+  userBubble: { alignSelf: 'flex-end', backgroundColor: '#fff', borderWidth: 1, borderColor: '#000' },
+  botBubble: { alignSelf: 'flex-start', backgroundColor: '#000' },
+  inputRow: { flexDirection: 'row', padding: 12, borderTopWidth: 1, borderTopColor: '#e5e7eb' },
+  input: { flex: 1, height: 40, borderWidth: 1, borderColor: '#d1d5db', borderRadius: 20, paddingHorizontal: 16, marginRight: 8 },
+  sendBtn: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
+});
+```
+
+---
+
+## Differences from Web SDK
+
+| | Web (`@usecrow/ui`) | React Native (`@usecrow/client`) |
+|-|---------------------|----------------------------------|
+| **UI** | Pre-built widget/copilot | You build your own native UI |
+| **Streaming** | `ReadableStream` (automatic) | Custom `StreamReader` required |
+| **Storage** | `localStorage` (automatic) | AsyncStorage adapter (manual setup) |
+| **Browser tools** | `whatsOnScreen`, page refresh | Not applicable — register your own |
+| **Installation** | `@usecrow/client` + `@usecrow/ui` | `@usecrow/client` only |
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Identity Verification" icon="shield-halved" href="/identity-verification">
+    Generate JWT tokens on your backend
+  </Card>
+  <Card title="Client-Side Tools" icon="screwdriver-wrench" href="/client-side-tools">
+    Register tools the agent can call
+  </Card>
+  <Card title="Embed Widget" icon="code" href="/embed-widget">
+    Web widget installation guide
+  </Card>
+  <Card title="Callbacks" icon="bell" href="/callbacks">
+    Subscribe to lifecycle events
+  </Card>
+</CardGroup>
