@@ -51,6 +51,7 @@ Choose your preferred installation method:
     | `data-variant` | No | `widget` (default) or `copilot` |
     | `data-subdomain` | No | Subdomain key for [multi-subdomain endpoints](/multi-subdomain-endpoints) |
     | `data-language` | No | ISO 639-1 language code (e.g., `es`, `fr`, `ja`). See [Multi-Language](/multi-language) |
+    | `data-context-label` | No | Label shown in the widget indicating what page the AI sees. See [Context Label](#context-label) |
 
     After the script loads, use `window.crow()` to pass functions and objects:
 
@@ -62,6 +63,7 @@ Choose your preferred installation method:
     | `registerToolRenderers` | Custom inline visuals. See [Renderers](#tool-renderers) |
     | `identify` | Manual JWT token (alternative to fetcher) |
     | `registerTools` | Client-side tool handlers |
+    | `setContextLabel` | Visible label for current page context. See [Context Label](#context-label) |
     | `open` | Programmatically open/expand the widget or copilot |
     | `close` | Programmatically close/collapse the widget or copilot |
   </Tab>
@@ -103,6 +105,7 @@ Choose your preferred installation method:
     | `onToolResult` | No | Callback `(toolName, result) => void` fired when a server-side tool completes |
     | `subdomain` | No | Subdomain key for [multi-subdomain endpoints](/multi-subdomain-endpoints) |
     | `language` | No | ISO 639-1 language code (e.g., `es`, `fr`, `ja`). See [Multi-Language](/multi-language) |
+    | `contextLabel` | No | Label shown in the widget indicating what page the AI sees. See [Context Label](#context-label) |
     | `navigate` | No | SPA navigation function (e.g. `router.push`) for internal links |
 
     <Accordion title="Copilot Sidebar">
@@ -287,6 +290,48 @@ Give the AI context about the current page so it can perform page-aware actions.
     }, [pathname]);
 
     <CrowWidget context={context} ... />
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Context Label
+
+Show users what page context the AI is aware of — a small label displayed at the top of the widget. Unlike `context` (which is invisible data sent to the AI), `contextLabel` is a visible indicator for the user.
+
+<Tabs>
+  <Tab title="Script Tag">
+    ```javascript
+    window.crow('setContextLabel', 'Viewing: Blog Post #123');
+
+    // Update on navigation:
+    window.addEventListener('popstate', () => {
+      window.crow('setContextLabel', getPageLabel());
+    });
+
+    // Clear the label:
+    window.crow('setContextLabel', '');
+    ```
+  </Tab>
+
+  <Tab title="React SDK">
+    Pass a `contextLabel` string — it's reactive and updates automatically:
+
+    ```tsx
+    <CrowCopilot
+      contextLabel={`Viewing: ${currentPage.title}`}
+      ...
+    />
+    ```
+
+    Or with `CrowWidget`:
+
+    ```tsx
+    <CrowWidget
+      contextLabel="Viewing: Blog Post #123"
+      ...
+    />
     ```
   </Tab>
 </Tabs>
